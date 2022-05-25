@@ -2,6 +2,7 @@ import { SessionStore } from "./types";
 
 export interface CookieSessionStoreOptions {
   path?: string;
+  domain?: string;
   sameSite?: "Lax" | "Strict" | "None";
 }
 
@@ -9,12 +10,14 @@ export default class CookieSessionStore implements SessionStore {
   private readonly sessionName: string;
   private readonly secureFlag: string;
   private readonly path: string;
+  private readonly domain: string;
   private readonly sameSite: string;
 
   constructor(cookieName: string, opts: CookieSessionStoreOptions = {}) {
     this.sessionName = cookieName;
 
     this.path = !!opts.path ? `; path=${opts.path}` : "";
+    this.domain = !!opts.domain ? `; domain=${opts.domain}` : "";
     this.sameSite = !!opts.sameSite ? `; SameSite=${opts.sameSite}` : "";
 
     if (typeof window !== "undefined") {
@@ -35,14 +38,13 @@ export default class CookieSessionStore implements SessionStore {
 
   update(val: string) {
     if (typeof document !== "undefined") {
-      document.cookie = `${this.sessionName}=${val}${this.secureFlag}${this.path}${this.sameSite}`;
+      document.cookie = `${this.sessionName}=${val}${this.secureFlag}${this.path}${this.domain}${this.sameSite}`;
     }
   }
 
   delete() {
     if (typeof document !== "undefined") {
-      document.cookie =
-        this.sessionName + "=; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+      document.cookie = `${this.sessionName}=; expires=Thu, 01 Jan 1970 00:00:01 GMT${this.secureFlag}${this.path}${this.domain}${this.sameSite}`;
     }
   }
 }
