@@ -3,10 +3,10 @@ import SessionManager from "./SessionManager";
 import CookieSessionStore, {
   CookieSessionStoreOptions,
 } from "./CookieSessionStore";
-import MemorySessionStore from "./MemorySessionStore";
-import LocalStorageSessionStore, {
-  localStorageSupported,
-} from "./LocalStorageSessionStore";
+// import MemorySessionStore from "./MemorySessionStore";
+// import LocalStorageSessionStore, {
+//   localStorageSupported,
+// } from "./LocalStorageSessionStore";
 import * as API from "./api";
 
 let manager = new SessionManager();
@@ -29,11 +29,11 @@ export function setCookieStore(
   setStore(new CookieSessionStore(sessionName, opts));
 }
 
-export function setLocalStorageStore(sessionName: string): void {
-  localStorageSupported()
-    ? setStore(new LocalStorageSessionStore(sessionName))
-    : setStore(new MemorySessionStore());
-}
+// export function setLocalStorageStore(sessionName: string): void {
+//   localStorageSupported()
+//     ? setStore(new LocalStorageSessionStore(sessionName))
+//     : setStore(new MemorySessionStore());
+// }
 
 export function session(): string | undefined {
   return manager.sessionToken();
